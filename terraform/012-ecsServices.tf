@@ -1,7 +1,8 @@
 #######################################
 # ECS Fargate Service: quoteApp_service
-# Direct public IP access — NO Load Balancer
+# Two containers, no ALB, direct public access
 #######################################
+
 resource "aws_ecs_service" "quoteApp_service" {
   name            = "${var.project-name}-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
@@ -10,13 +11,12 @@ resource "aws_ecs_service" "quoteApp_service" {
   desired_count   = 1
 
   network_configuration {
-    subnets          = var.public_subnets
+    subnets          = aws_subnet.public[*].id
     security_groups  = [aws_security_group.ecs_service_sg.id]
     assign_public_ip = true
   }
 
-  # NOTE: ECS supports only one service discovery registry per service.
-  # Use this only if needed for backend discovery via namespace
+  # ECS supports only ONE service discovery registry — use for backend
   service_registries {
     registry_arn   = aws_service_discovery_service.quote_backend_sd.arn
     container_name = "quote-backend"
@@ -31,5 +31,3 @@ resource "aws_ecs_service" "quoteApp_service" {
     Name = "${var.project-name}-ecsService"
   }
 }
-
-
