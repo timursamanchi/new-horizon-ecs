@@ -19,11 +19,12 @@ resource "aws_security_group_rule" "ecs_ssh_in" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = var.allowed-ingress-cidr
+  cidr_blocks       = var.allowed_ingress_cidr
   security_group_id = aws_security_group.ecs_cluster_sg.id
 }
+
 resource "aws_security_group_rule" "ecs_http_in" {
-  description       = "Allow HTTP traffic from ALB"
+  description       = "Allow HTTP traffic from the internet (frontend access)"
   type              = "ingress"
   from_port         = 80
   to_port           = 80
@@ -33,13 +34,23 @@ resource "aws_security_group_rule" "ecs_http_in" {
 }
 
 resource "aws_security_group_rule" "ecs_https_in" {
-  description       = "Allow HTTPS traffic from ALB"
+  description       = "Allow HTTPS traffic from the internet (if needed)"
   type              = "ingress"
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.ecs_cluster_sg.id
+}
+
+resource "aws_security_group_rule" "ecs_backend_in" {
+  description       = "Allow backend API traffic on port 8080"
+  type              = "ingress"
+  from_port         = 8080
+  to_port           = 8080
+  protocol          = "tcp"
+  source_security_group_id = aws_security_group.ecs_cluster_sg.id
+  security_group_id        = aws_security_group.ecs_cluster_sg.id
 }
 
 #######################################

@@ -12,11 +12,11 @@ resource "aws_ecs_service" "quoteApp_service" {
 
   network_configuration {
     subnets          = aws_subnet.public[*].id
-    security_groups  = [aws_security_group.ecs_service_sg.id]
+    security_groups  = [aws_security_group.ecs_cluster_sg.id]
     assign_public_ip = true
   }
 
-  # ECS supports only ONE service discovery registry — use for backend
+  # ECS allows only ONE service discovery registry — use for backend
   service_registries {
     registry_arn   = aws_service_discovery_service.quote_backend_sd.arn
     container_name = "quote-backend"
