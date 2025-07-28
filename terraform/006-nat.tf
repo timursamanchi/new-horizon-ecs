@@ -3,7 +3,7 @@
 #######################################
 resource "aws_eip" "nat_eip" {
   tags = {
-    Name = "${var.project-name}-nat-eip"
+    Name = "${var.project_name}-nat-eip"
   }
 }
 
@@ -15,7 +15,7 @@ resource "aws_nat_gateway" "ecs_nat" {
   subnet_id     = aws_subnet.public[0].id # use first public subnet
 
   tags = {
-    Name = "${var.project-name}-natGateway"
+    Name = "${var.project_name}-natGateway"
   }
 
   depends_on = [aws_internet_gateway.ecs_gateway]

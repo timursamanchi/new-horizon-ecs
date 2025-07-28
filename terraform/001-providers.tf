@@ -37,5 +37,5 @@ provider "random" {}
 provider "null" {}
 
 provider "aws" {
-  region = var.aws-region
+  region = var.aws_region
 }

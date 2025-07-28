@@ -2,11 +2,11 @@
 # ECS CLUSTER SECURITY GROUP
 #######################################
 resource "aws_security_group" "ecs_cluster_sg" {
-  name   = "${var.project-name}-sg"
+  name   = "${var.project_name}-sg"
   vpc_id = aws_vpc.ecs_vpc.id
 
   tags = {
-    Name = "${var.project-name}-sg"
+    Name = "${var.project_name}-sg"
   }
 }
 
@@ -19,7 +19,7 @@ resource "aws_security_group_rule" "ecs_ssh_in" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = var.allowed-ingress-cidr
+  cidr_blocks       = var.allowed_ingress_cidr
   security_group_id = aws_security_group.ecs_cluster_sg.id
 }
 

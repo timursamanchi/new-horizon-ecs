@@ -6,12 +6,12 @@ locals {
 
   # Each AZ gets a different /25 CIDR block for public
   public_subnet_cidrs = [for i in range(length(local.selected_azs)) :
-    cidrsubnet(var.cidr-block, 2, i)
+    cidrsubnet(var.cidr_block, 2, i)
   ]
 
   # Each AZ gets a different /25 CIDR block for private (starts after public)
   private_subnet_cidrs = [for i in range(length(local.selected_azs)) :
-    cidrsubnet(var.cidr-block, 2, i + length(local.selected_azs))
+    cidrsubnet(var.cidr_block, 2, i + length(local.selected_azs))
   ]
 }
 
@@ -27,7 +27,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.project-name}-publicSubnet-${count.index + 1}"
+    Name = "${var.project_name}-publicSubnet-${count.index + 1}"
     AZ   = local.selected_azs[count.index]
     Role = "public"
   }
@@ -45,7 +45,7 @@ resource "aws_subnet" "private" {
   map_public_ip_on_launch = false
 
   tags = {
-    Name = "${var.project-name}-privateSubnet-${count.index + 1}"
+    Name = "${var.project_name}-privateSubnet-${count.index + 1}"
     AZ   = local.selected_azs[count.index]
     Role = "private"
   }
