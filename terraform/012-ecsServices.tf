@@ -16,11 +16,11 @@ resource "aws_ecs_service" "quoteApp_service" {
     assign_public_ip = true
   }
 
-  # ECS allows only ONE service discovery registry — use for backend
+  # ECS supports only ONE service discovery registry — use for backend only
   service_registries {
     registry_arn   = aws_service_discovery_service.quote_backend_sd.arn
     container_name = "quote-backend"
-    container_port = 8080
+    # container_port = 8080  ❌ Not needed in awsvpc mode — removed
   }
 
   deployment_controller {

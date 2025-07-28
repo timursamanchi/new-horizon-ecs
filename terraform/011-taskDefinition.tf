@@ -29,7 +29,7 @@ resource "aws_ecs_task_definition" "quoteApp_task" {
       logConfiguration = {
         logDriver = "awslogs",
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.quote_backend.name,
+          awslogs-group         = "${aws_cloudwatch_log_group.quote_backend.name}",
           awslogs-region        = "eu-west-1",
           awslogs-stream-prefix = "ecs"
         }
@@ -50,7 +50,7 @@ resource "aws_ecs_task_definition" "quoteApp_task" {
       logConfiguration = {
         logDriver = "awslogs",
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.quote_frontend.name,
+          awslogs-group         = "${aws_cloudwatch_log_group.quote_frontend.name}",
           awslogs-region        = "eu-west-1",
           awslogs-stream-prefix = "ecs"
         }
@@ -64,4 +64,9 @@ resource "aws_ecs_task_definition" "quoteApp_task" {
       ]
     }
   ])
+
+  depends_on = [
+    aws_cloudwatch_log_group.quote_backend,
+    aws_cloudwatch_log_group.quote_frontend
+  ]
 }

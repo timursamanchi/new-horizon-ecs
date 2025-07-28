@@ -19,7 +19,7 @@ resource "aws_security_group_rule" "ecs_ssh_in" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = var.allowed_ingress_cidr
+  cidr_blocks       = var.allowed-ingress-cidr
   security_group_id = aws_security_group.ecs_cluster_sg.id
 }
 
