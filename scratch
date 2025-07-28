@@ -1,0 +1,14 @@
+plan for tomorrow:
+1- push the whole thing to gihub
+2- create a branch and work frm there
+3- move the frontend to the private subnet and lose the pub IP
+4- add an ALB + all its requirements
+4.1- add storage for the whatever can be saved there
+5- Add HTTPS via ACM + ALB or NGINX self-signed certs
+6- Add health checks to your ECS services
+7- add a healthcheck.sh for the final instal
+8- bounice: ad another seperate containe for Jekyll. add the cayman theme, and created and index.md to use isnstead
+
+final push to githu and lets close this ecs project...
+
+Next prject: do exactly the same but using EKS is this possible?)

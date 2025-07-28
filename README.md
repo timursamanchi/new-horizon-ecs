@@ -73,14 +73,14 @@ aws ecs list-tasks \
 
 aws ecs describe-tasks \
   --cluster quoteApp-ecsCluster \
-  --tasks arn:aws:ecs:eu-west-2:040929397520:task/quoteApp-ecsCluster/2f8c8d4369724a6bae674fabf08f57dc \
+  --tasks arn:aws:ecs:eu-west-2:040929397520:task/quoteApp-ecsCluster/fbe7ece48ac04b2d81f2fcf936653450 \
   --query "tasks[0].containers[*].name" \
   --output text
 
 
 aws ecs execute-command \
   --cluster quoteApp-ecsCluster \
-  --task arn:aws:ecs:eu-west-2:040929397520:task/quoteApp-ecsCluster/2f8c8d4369724a6bae674fabf08f57dc \
+  --task arn:aws:ecs:eu-west-2:040929397520:task/quoteApp-ecsCluster/fbe7ece48ac04b2d81f2fcf936653450 \
   --container quote-frontend \
   --command "/bin/sh" \
   --interactive
