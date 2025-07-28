@@ -1,4 +1,4 @@
-# new-horizon-ecs: ECS Quote App Deployment (Frontend + Backend)
+# ECS Quote App Deployment (Front/Backend)
 new-horizon-ecs: creating a multi container AWS ECS cluster using terraform
 
 ## 🚀 Running Both Containers in a Single Fargate Task Definition
