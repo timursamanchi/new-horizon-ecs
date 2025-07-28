@@ -19,7 +19,7 @@ variable "aws-region" {
 #######################################
 # Ingress Access Configuration Control
 #######################################
-variable "allowed_ingress_cidr" {
+variable "allowed-ingress-cidr" {
   description = "List of CIDR blocks allowed to access ECS services (SSH/HTTP/HTTPS)"
   type        = list(string)
   default     = ["0.0.0.0/0"]
