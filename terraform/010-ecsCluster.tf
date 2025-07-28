@@ -15,7 +15,9 @@ resource "aws_ecs_cluster" "ecs_cluster" {
     Name = "${var.project_name}-ecsCluster"
   }
 }
-
+#######################################
+# service discovery and tag it
+#######################################
 resource "aws_service_discovery_private_dns_namespace" "quote_namespace" {
   name        = "internal.local"
   vpc         = aws_vpc.ecs_vpc.id
@@ -43,7 +45,7 @@ resource "aws_service_discovery_service" "quote_backend_sd" {
   }
 
   tags = {
-    Name = "${var.project_name}-backend-SD"
+    Name = "${var.project_name}-backend-sd"
   }
 }
 
@@ -64,6 +66,6 @@ resource "aws_service_discovery_service" "quote_frontend_sd" {
   }
 
   tags = {
-    Name = "${var.project_name}-frontend-SD"
+    Name = "${var.project_name}-frontend-sd"
   }
 }

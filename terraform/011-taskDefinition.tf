@@ -1,4 +1,3 @@
-
 #######################################
 # Task Definition: quote-backend and quote-frontend
 #######################################

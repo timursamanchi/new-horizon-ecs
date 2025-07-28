@@ -1,5 +1,5 @@
 #######################################
-# AWS CloudWatch Log Groups
+# CloudWatch Log Groups
 #######################################
 resource "aws_cloudwatch_log_group" "quote_frontend" {
   name              = "/ecs/quote-frontend"
