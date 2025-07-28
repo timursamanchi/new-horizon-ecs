@@ -18,8 +18,8 @@ new-horizon-ecs: creating a multi container AWS ECS cluster using terraform
 3. **Build tag and push docker images to dockerhub/ECR. 
 ```
 
-docker buildx build --platform=linux/amd64,linux/arm64 --no-cache --push -t 040929397520.dkr.ecr.eu-west-1.amazonaws.com/quote-frontend:NH01 ./frontend
-docker buildx build --platform=linux/amd64,linux/arm64 --no-cache --push -t 040929397520.dkr.ecr.eu-west-1.amazonaws.com/quote-backend:NH01 ./backend
+docker buildx build --platform=linux/amd64,linux/arm64 --no-cache --push -t 040929397520.dkr.ecr.eu-west-2.amazonaws.com/quote-frontend:v01 ./frontend
+docker buildx build --platform=linux/amd64,linux/arm64 --no-cache --push -t 040929397520.dkr.ecr.eu-west-2.amazonaws.com/quote-backend:v01 ./backend
 ```
 
 

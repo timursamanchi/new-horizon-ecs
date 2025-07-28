@@ -1,0 +1,25 @@
+{
+  "name": "quote-frontend",
+  "image": "040929397520.dkr.ecr.eu-west-1.amazonaws.com/quote-frontend:v01",
+  "essential": true,
+  "portMappings": [
+    {
+      "containerPort": 80,
+      "protocol": "tcp"
+    }
+  ],
+  "logConfiguration": {
+    "logDriver": "awslogs",
+    "options": {
+      "awslogs-group": "/ecs/quote-frontend",
+      "awslogs-region": "eu-west-2",
+      "awslogs-stream-prefix": "ecs"
+    }
+  },
+  "environment": [
+    {
+      "name": "QUOTE_API_URL",
+      "value": "http://localhost:8080/quote"
+    }
+  ]
+}
