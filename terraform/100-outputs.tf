@@ -57,3 +57,22 @@ output "ecs_task_execution_role_arn" {
 output "ecs_task_role_arn" {
   value = aws_iam_role.ecs_task_role.arn
 }
+
+######################################
+# ✅ ECS cluster details
+#######################################
+output "ecs_cluster_name" {
+  value = aws_ecs_cluster.ecs_cluster.name
+}
+
+output "service_discovery_namespace_id" {
+  value = aws_service_discovery_private_dns_namespace.quote_namespace.id
+}
+
+output "quote_backend_sd_arn" {
+  value = aws_service_discovery_service.quote_backend_sd.arn
+}
+
+output "quote_frontend_sd_arn" {
+  value = aws_service_discovery_service.quote_frontend_sd.arn
+}
