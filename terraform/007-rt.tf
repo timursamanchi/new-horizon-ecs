@@ -6,7 +6,7 @@ resource "aws_route_table" "ecs_public_rt" {
   vpc_id = aws_vpc.ecs_vpc.id
 
   tags = {
-    Name = "${var.project-name}-publicRT"
+    Name = "${var.project_name}-publicRT"
   }
 }
 
@@ -30,7 +30,7 @@ resource "aws_route_table" "ecs_private_rt" {
   vpc_id = aws_vpc.ecs_vpc.id
 
   tags = {
-    Name = "${var.project-name}-privateRT"
+    Name = "${var.project_name}-privateRT"
   }
 }
 

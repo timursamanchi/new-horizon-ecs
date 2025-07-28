@@ -3,7 +3,7 @@
 # Task Definition: quote-backend and quote-frontend
 #######################################
 resource "aws_ecs_task_definition" "quoteApp_task" {
-  family                   = "${var.project-name}-taskDef"
+  family                   = "${var.project_name}-taskDef"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = "512"

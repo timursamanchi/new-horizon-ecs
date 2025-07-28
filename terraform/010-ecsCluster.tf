@@ -4,7 +4,7 @@
 #######################################
 
 resource "aws_ecs_cluster" "ecs_cluster" {
-  name = "${var.project-name}-ecsCluster"
+  name = "${var.project_name}-ecsCluster"
 
   setting {
     name  = "containerInsights"
@@ -12,7 +12,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
   }
 
   tags = {
-    Name = "${var.project-name}-ecsCluster"
+    Name = "${var.project_name}-ecsCluster"
   }
 }
 
@@ -22,7 +22,7 @@ resource "aws_service_discovery_private_dns_namespace" "quote_namespace" {
   description = "Quote service namespace"
 
   tags = {
-    Name = "${var.project-name}-namespace"
+    Name = "${var.project_name}-namespace"
   }
 }
 
@@ -43,7 +43,7 @@ resource "aws_service_discovery_service" "quote_backend_sd" {
   }
 
   tags = {
-    Name = "${var.project-name}-backend-SD"
+    Name = "${var.project_name}-backend-SD"
   }
 }
 
@@ -64,6 +64,6 @@ resource "aws_service_discovery_service" "quote_frontend_sd" {
   }
 
   tags = {
-    Name = "${var.project-name}-frontend-SD"
+    Name = "${var.project_name}-frontend-SD"
   }
 }

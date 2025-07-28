@@ -4,7 +4,7 @@
 #######################################
 
 resource "aws_ecs_service" "quoteApp_service" {
-  name            = "${var.project-name}-service"
+  name            = "${var.project_name}-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.quoteApp_task.arn
   launch_type     = "FARGATE"
@@ -28,6 +28,6 @@ resource "aws_ecs_service" "quoteApp_service" {
   }
 
   tags = {
-    Name = "${var.project-name}-ecsService"
+    Name = "${var.project_name}-ecsService"
   }
 }

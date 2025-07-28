@@ -2,7 +2,7 @@
 # ECS Task Execution Role
 #######################################
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "${var.project-name}-task-exec-role"
+  name = "${var.project_name}-task-exec-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -16,7 +16,7 @@ resource "aws_iam_role" "ecs_task_execution_role" {
   })
 
   tags = {
-    Name = "${var.project-name}-task-exec-role"
+    Name = "${var.project_name}-task-exec-role"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
 # ECS Task Role (for Execute Command)
 #######################################
 resource "aws_iam_role" "ecs_task_role" {
-  name = "${var.project-name}-task-role"
+  name = "${var.project_name}-task-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -43,7 +43,7 @@ resource "aws_iam_role" "ecs_task_role" {
   })
 
   tags = {
-    Name = "${var.project-name}-task-role"
+    Name = "${var.project_name}-task-role"
   }
 }
 
