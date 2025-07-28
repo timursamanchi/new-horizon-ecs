@@ -36,3 +36,15 @@ output "private_subnets" {
   ]
 }
 
+#######################################
+# ✅ NAT Gateway ID and Elastic IP
+#######################################
+output "nat_gateway" {
+  description = "NAT Gateway ID and public IP"
+  value = {
+    id        = aws_nat_gateway.ecs_nat.id
+    public_ip = aws_eip.nat_eip.public_ip
+  }
+}
+
+
