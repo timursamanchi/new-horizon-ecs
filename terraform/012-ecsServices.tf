@@ -21,6 +21,10 @@ resource "aws_ecs_service" "quote_frontend_service" {
     assign_public_ip = true
   }
 
+    service_registries {
+    registry_arn = aws_service_discovery_service.quote_backend_sd.arn
+  }
+
   propagate_tags = "TASK_DEFINITION"
 
   tags = {
@@ -50,14 +54,14 @@ resource "aws_ecs_service" "quote_backend_service" {
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent         = 200
 
-  service_registries {
-    registry_arn = aws_service_discovery_service.quote_backend_sd.arn
-  }
-
   network_configuration {
     subnets          = [for s in aws_subnet.private : s.id]
     security_groups  = [aws_security_group.ecs_cluster_sg.id]
     assign_public_ip = false
+  }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.quote_backend_sd.arn
   }
 
   propagate_tags = "TASK_DEFINITION"

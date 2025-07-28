@@ -1,6 +1,6 @@
 {
   "name": "quote-frontend",
-  "image": "040929397520.dkr.ecr.eu-west-2.amazonaws.com/quote-frontend:v01",
+  "image": "040929397520.dkr.ecr.eu-west-2.amazonaws.com/quote-frontend:v02",
   "essential": true,
 
   "portMappings": [

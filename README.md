@@ -18,8 +18,8 @@ new-horizon-ecs: creating a multi container AWS ECS cluster using terraform
 3. **Build tag and push docker images to dockerhub/ECR. 
 ```
 
-docker buildx build --platform=linux/amd64,linux/arm64 --no-cache --push -t 040929397520.dkr.ecr.eu-west-2.amazonaws.com/quote-frontend:v01 ./frontend
-docker buildx build --platform=linux/amd64,linux/arm64 --no-cache --push -t 040929397520.dkr.ecr.eu-west-2.amazonaws.com/quote-backend:v01 ./backend
+docker buildx build --platform=linux/amd64,linux/arm64 --no-cache --push -t 040929397520.dkr.ecr.eu-west-2.amazonaws.com/quote-frontend:v02 ./frontend
+docker buildx build --platform=linux/amd64,linux/arm64 --no-cache --push -t 040929397520.dkr.ecr.eu-west-2.amazonaws.com/quote-backend:v02 ./backend
 ```
 
 
@@ -73,14 +73,27 @@ aws ecs list-tasks \
 
 aws ecs describe-tasks \
   --cluster quoteApp-ecsCluster \
-  --tasks arn:aws:ecs:eu-west-2:040929397520:task/quoteApp-ecsCluster/9f71f65f850c4a68bca13ba6bf4a1098 \
+  --tasks arn:aws:ecs:eu-west-2:040929397520:task/quoteApp-ecsCluster/2f8c8d4369724a6bae674fabf08f57dc \
   --query "tasks[0].containers[*].name" \
   --output text
 
 
 aws ecs execute-command \
   --cluster quoteApp-ecsCluster \
-  --task arn:aws:ecs:eu-west-2:040929397520:task/quoteApp-ecsCluster/9f71f65f850c4a68bca13ba6bf4a1098 \
+  --task arn:aws:ecs:eu-west-2:040929397520:task/quoteApp-ecsCluster/2f8c8d4369724a6bae674fabf08f57dc \
   --container quote-frontend \
   --command "/bin/sh" \
   --interactive
+
+
+timursamanchi@Timurs-Air ~/p/New-Horizon-ECS/terraform [main] % aws logs get-log-events \
+  --log-group-name "/ecs/quote-frontend" \
+  --log-stream-name "$(aws logs describe-log-streams \
+      --log-group-name "/ecs/quote-frontend" \
+      --order-by "LastEventTime" \
+      --descending \
+      --limit 1 \
+      --query 'logStreams[0].logStreamName' \
+      --output text)" \
+  --limit 50 \
+  --output text
