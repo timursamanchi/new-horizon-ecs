@@ -33,7 +33,7 @@ docker volume ls     # should be mostly empty
 Check internet gateway
 ```
 aws ec2 describe-internet-gateways \
-  --query "InternetGateways[?Attachments[?VpcId=='vpc-0ec0b4e455023b995']]" \
+  --query "InternetGateways[?Attachments[?VpcId=='vpc-<id>']]" \
   --region eu-west-1
 ```
 

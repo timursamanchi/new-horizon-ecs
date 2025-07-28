@@ -9,10 +9,18 @@ variable "project-name" {
 variable "cidr-block" {
   description = "CIDR block for the VPC"
   type        = string
-  default     = "10.0.0.0/16" 
+  default     = "10.0.0.0/16"
 }
 variable "aws-region" {
   description = "AWS region to deploy resources into"
   type        = string
   default     = "eu-west-1" # Ireland
+}
+#######################################
+# Ingress Access Configuration Control
+#######################################
+variable "allowed_ingress_cidr" {
+  description = "List of CIDR blocks allowed to access ECS services (SSH/HTTP/HTTPS)"
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
 }
