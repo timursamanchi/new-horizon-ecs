@@ -36,3 +36,9 @@ aws ec2 describe-internet-gateways \
   --query "InternetGateways[?Attachments[?VpcId=='vpc-0ec0b4e455023b995']]" \
   --region eu-west-1
 ```
+
+create ECR repository
+```
+# Create an ECR repository
+aws ecr create-repository --repository-name <name>
+```
