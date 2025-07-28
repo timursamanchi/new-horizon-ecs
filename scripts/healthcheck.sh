@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # === Config ===
-CLUSTER="quoteApp-ecsCluster"                      # Update this if needed
-REGION="${AWS_REGION:-eu-west-2}"                  # Default region fallback
+CLUSTER="quoteApp-ecsCluster"
+REGION="${AWS_REGION:-eu-west-2}"
 LOG_FILE="ecs_health_check.log"
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S %Z")
 
@@ -13,7 +13,7 @@ echo "🔍 Scanning ECS Cluster: $CLUSTER in region: $REGION" | tee -a "$LOG_FIL
 echo "=====================================================================" | tee -a "$LOG_FILE"
 echo "" | tee -a "$LOG_FILE"
 
-# === List Running Services ===
+# === List Services ===
 SERVICE_NAMES=$(aws ecs list-services \
   --cluster "$CLUSTER" \
   --region "$REGION" \
@@ -24,7 +24,6 @@ for SERVICE in $SERVICE_NAMES; do
   echo "📦 Service: $SERVICE" | tee -a "$LOG_FILE"
   echo "-----------------------------" | tee -a "$LOG_FILE"
 
-  # Get running task ARNs
   TASK_ARNS=$(aws ecs list-tasks \
     --cluster "$CLUSTER" \
     --service-name "$SERVICE" \
@@ -33,7 +32,11 @@ for SERVICE in $SERVICE_NAMES; do
     --query 'taskArns' \
     --output text)
 
-  # Get task definition
+  if [[ -z "$TASK_ARNS" ]]; then
+    echo "⚠️ No running tasks found for $SERVICE" | tee -a "$LOG_FILE"
+    continue
+  fi
+
   TASK_DEF_ARN=$(aws ecs describe-services \
     --cluster "$CLUSTER" \
     --services "$SERVICE" \
@@ -41,47 +44,49 @@ for SERVICE in $SERVICE_NAMES; do
     --query 'services[0].taskDefinition' \
     --output text)
 
-  # Get container port
-  CONTAINER_PORT=$(aws ecs describe-task-definition \
-    --task-definition "$TASK_DEF_ARN" \
+  # Get ENI and Public IP (from first task is enough)
+  TASK_ARN=$(echo "$TASK_ARNS" | awk '{print $1}')
+  ENI_ID=$(aws ecs describe-tasks \
+    --cluster "$CLUSTER" \
+    --tasks "$TASK_ARN" \
     --region "$REGION" \
-    --query 'taskDefinition.containerDefinitions[0].portMappings[0].containerPort' \
+    --query 'tasks[0].attachments[0].details[?name==`networkInterfaceId`].value' \
     --output text)
 
-  if [[ -z "$TASK_ARNS" ]]; then
-    echo "⚠️ No running tasks found for $SERVICE" | tee -a "$LOG_FILE"
-    continue
-  fi
+  PUBLIC_IP=$(aws ec2 describe-network-interfaces \
+    --network-interface-ids "$ENI_ID" \
+    --region "$REGION" \
+    --query 'NetworkInterfaces[0].Association.PublicIp' \
+    --output text)
 
-  # Loop through each running task
-  for TASK_ARN in $TASK_ARNS; do
-    ENI_ID=$(aws ecs describe-tasks \
-      --cluster "$CLUSTER" \
-      --tasks "$TASK_ARN" \
-      --region "$REGION" \
-      --query 'tasks[0].attachments[0].details[?name==`networkInterfaceId`].value' \
-      --output text)
+  echo "🔹 Task ARN: $TASK_ARN" | tee -a "$LOG_FILE"
+  echo "🔹 ENI ID: $ENI_ID" | tee -a "$LOG_FILE"
+  echo "🔹 Public IP: $PUBLIC_IP" | tee -a "$LOG_FILE"
 
-    PUBLIC_IP=$(aws ec2 describe-network-interfaces \
-      --network-interface-ids "$ENI_ID" \
-      --region "$REGION" \
-      --query 'NetworkInterfaces[0].Association.PublicIp' \
-      --output text)
+  # Test every container in task definition
+  CONTAINER_INFO=$(aws ecs describe-task-definition \
+    --task-definition "$TASK_DEF_ARN" \
+    --region "$REGION" \
+    --query 'taskDefinition.containerDefinitions[*].{Name:name,Port:portMappings[0].containerPort}' \
+    --output json)
 
-    TEST_URL="http://$PUBLIC_IP:$CONTAINER_PORT"
+  echo "$CONTAINER_INFO" | jq -c '.[]' | while read -r container; do
+    NAME=$(echo "$container" | jq -r '.Name')
+    PORT=$(echo "$container" | jq -r '.Port')
+
+    TEST_URL="http://$PUBLIC_IP:$PORT"
     STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "$TEST_URL")
     RESPONSE_BODY=$(curl -s --max-time 5 "$TEST_URL")
 
-    echo "🔹 Task ARN: $TASK_ARN" | tee -a "$LOG_FILE"
-    echo "🔹 ENI ID: $ENI_ID" | tee -a "$LOG_FILE"
-    echo "🔹 Public IP: $PUBLIC_IP" | tee -a "$LOG_FILE"
-    echo "🔹 Port: $CONTAINER_PORT" | tee -a "$LOG_FILE"
+    echo "🌐 Container: $NAME" | tee -a "$LOG_FILE"
+    echo "🔹 Port: $PORT" | tee -a "$LOG_FILE"
     echo "🌐 Test URL: $TEST_URL" | tee -a "$LOG_FILE"
     echo "📡 HTTP Status: $STATUS_CODE" | tee -a "$LOG_FILE"
     echo "📨 Response Body:" | tee -a "$LOG_FILE"
     echo "$RESPONSE_BODY" | tee -a "$LOG_FILE"
     echo "-----------------------------" | tee -a "$LOG_FILE"
   done
+
   echo "" | tee -a "$LOG_FILE"
 done
 
