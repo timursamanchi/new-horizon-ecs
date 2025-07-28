@@ -6,10 +6,10 @@ variable "project-name" {
   type        = string
   default     = "test-only-DELETE"
 }
-variable "ecs-cidr-block" {
+variable "cidr-block" {
   description = "CIDR block for the VPC"
   type        = string
-  default     = "10.0.0.0/22" # divide the /22 block into 4 subnets of size /24, giving 256 IPs per subnet (254 usable).
+  default     = "10.0.0.0/16" 
 }
 variable "aws-region" {
   description = "AWS region to deploy resources into"
