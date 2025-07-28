@@ -47,4 +47,13 @@ output "nat_gateway" {
   }
 }
 
+######################################
+# ✅ ECS IAM taskRole and taskExecution-role
+#######################################
+output "ecs_task_execution_role_arn" {
+  value = aws_iam_role.ecs_task_execution_role.arn
+}
 
+output "ecs_task_role_arn" {
+  value = aws_iam_role.ecs_task_role.arn
+}
