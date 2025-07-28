@@ -22,7 +22,7 @@
   "environment": [
     {
       "name": "QUOTE_API_URL",
-      "value": "http://localhost:8080/quote"
+      "value": "http://quote-backend.internal.local:8080/"
     }
   ]
 }

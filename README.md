@@ -64,3 +64,23 @@ create ECR repository
 # Create an ECR repository
 aws ecr create-repository --repository-name <name>
 ```
+
+aws ecs list-tasks \
+  --cluster quoteApp-ecsCluster \
+  --service-name quoteApp-frontend-service \
+  --query "taskArns[0]" \
+  --output text
+
+aws ecs describe-tasks \
+  --cluster quoteApp-ecsCluster \
+  --tasks arn:aws:ecs:eu-west-2:040929397520:task/quoteApp-ecsCluster/9f71f65f850c4a68bca13ba6bf4a1098 \
+  --query "tasks[0].containers[*].name" \
+  --output text
+
+
+aws ecs execute-command \
+  --cluster quoteApp-ecsCluster \
+  --task arn:aws:ecs:eu-west-2:040929397520:task/quoteApp-ecsCluster/9f71f65f850c4a68bca13ba6bf4a1098 \
+  --container quote-frontend \
+  --command "/bin/sh" \
+  --interactive
